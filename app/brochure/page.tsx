@@ -6,8 +6,7 @@ export const metadata: Metadata = {
   description:
   "The Social App Store. Where Apps live and people connect.",
   openGraph: {
-    url: "https://hummingdragon.com", 
-    images: [""],
+    url: "https://hummingdragon.com"
   },
 };
 
