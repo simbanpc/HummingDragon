@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    # Do NOT publish port to host; Traefik will reach it on the shared network
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`hummingdragon.com`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+      - "traefik.http.routers.app.tls.domains[0].main=hummingdragon.com"
+      - "traefik.http.routers.app.tls.domains[0].sans=*.hummingdragon.com"
+    networks:
+      - web
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
