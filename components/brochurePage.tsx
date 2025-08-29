@@ -7,5 +7,5 @@ const PdfViewer = dynamic(() => import('@/components/pdfViewer'), {
 });
 
 export default function BrochurePage() {
-  return <PdfViewer fileUrl="/Humming_Dragon_Brochure_Website.pdf" />;
+  return <PdfViewer fileUrl="/brochure.pdf" />;
 }
