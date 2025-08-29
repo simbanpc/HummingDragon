@@ -1,4 +1,4 @@
-// components/PdfViewer.tsx
+// components/pdfViewer.tsx
 'use client';
 
 import dynamic from 'next/dynamic';
@@ -12,26 +12,35 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
   const [fallback, setFallback] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
-  // Helper: resolve URLs that respect basePath/assetPrefix
+  const isIOS = React.useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    const ua = navigator.userAgent;
+    // iPhone/iPad/iPod or iPadOS Safari (MacIntel + touch)
+    return /iP(hone|ad|od)/.test(ua) || (navigator.platform === 'MacIntel' && (navigator).maxTouchPoints > 1);
+  }, []);
+
   const withBase = React.useCallback((path: string) => {
-    // document.baseURI already includes basePath if configured
     return new URL(path.replace(/^\//, ''), typeof document !== 'undefined' ? document.baseURI : '/').toString();
   }, []);
 
-  // Load react-pdf after mount; point worker to same-origin path
   React.useEffect(() => {
     let alive = true;
     (async () => {
       try {
         const mod = await import('react-pdf');
-          const pdfjsLib = mod.pdfjs as unknown as typeof import('pdfjs-dist');
-          if (typeof Worker === 'function') {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = withBase('pdf.worker.min.js'); // or '/pdf.worker.min.js'
-          } else {
-            // Don’t rely on disableWorker (untyped); just fallback
-            setFallback(true);
-            return;
-          }
+
+        // Set worker URL (prefer modern .mjs; fall back to legacy .js if you copied both)
+        const pdfjsLib = mod.pdfjs as unknown as typeof import('pdfjs-dist');
+        const workerCandidates = ['pdf.worker.min.mjs', 'pdf.worker.min.js'];
+        // If you only copied the .mjs, this will pick it.
+        const workerSrc = withBase(workerCandidates[0]);
+
+        if (typeof Worker !== 'function') {
+          setFallback(true);
+          return;
+        }
+        pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+
         if (alive) setRPDF(mod);
       } catch {
         if (alive) setFallback(true);
@@ -40,22 +49,18 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
     return () => { alive = false; };
   }, [withBase]);
 
-  // Robust width measurement (handles initial 0 width)
   React.useEffect(() => {
     let raf = 0;
     let tries = 0;
-
     const measure = () => {
       const el = ref.current;
       const w = el?.getBoundingClientRect().width ?? 0;
       if (w > 10 || tries > 60) {
         setWidth(Math.min(900, Math.max(1, Math.round(w || (typeof window !== 'undefined' ? window.innerWidth : 390)))));
       } else {
-        tries++;
-        raf = requestAnimationFrame(measure);
+        tries++; raf = requestAnimationFrame(measure);
       }
     };
-
     measure();
 
     let ro: ResizeObserver | null = null;
@@ -63,12 +68,10 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
       ro = new ResizeObserver(measure);
       if (ref.current) ro.observe(ref.current);
     } else {
-      // Older Safari/webviews: fall back to window resize
       window.addEventListener('resize', measure);
       window.addEventListener('orientationchange', measure);
     }
     window.addEventListener('pageshow', measure);
-
     return () => {
       cancelAnimationFrame(raf);
       ro?.disconnect();
@@ -78,7 +81,6 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
     };
   }, []);
 
-  // Global safety net: if any client error bubbles, switch to iframe
   React.useEffect(() => {
     const onErr = () => setFallback(true);
     window.addEventListener('error', onErr);
@@ -90,11 +92,13 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
   }, []);
 
   if (fallback) {
-    // Native viewer fallback — very reliable on iOS/webviews
     return (
-      <div ref={ref} style={{ width: '100%', maxWidth: 900, margin: '0 auto', minHeight: '80vh', overflowX: 'hidden' }}>
+      <div
+        ref={ref}
+        style={{ width: '100%', maxWidth: 900, margin: '0 auto', minHeight: '80vh', overflowX: 'hidden' }}
+      >
         <iframe
-          src={`${withBase(fileUrl)}#toolbar=1&view=fitH`}
+          src={withBase(fileUrl)}
           title="PDF"
           style={{ position: 'relative', width: '100%', height: '100%', border: 0, display: 'block' }}
         />
@@ -107,19 +111,31 @@ function PdfViewerInner({ fileUrl = '/brochure.pdf' }: { fileUrl?: string }) {
   const { Document, Page } = RPDF;
 
   return (
-    <div ref={ref} style={{ width: '100%', maxWidth: 900, margin: '0 auto', overflowX: 'hidden' }}>
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+        maxWidth: 900,
+        margin: '0 auto',
+        overflowX: 'hidden',
+        // helps Safari not report 0 width inside flex/grid during first paint
+        minWidth: 1
+      }}
+    >
       <Document
         file={withBase(fileUrl)}
         onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
         onLoadError={() => setFallback(true)}
         loading={<div style={{ height: '60vh' }} />}
-        key={width} // force internal layout refresh when width resolves
+        key={width}
       >
         {Array.from({ length: numPages }, (_, i) => (
           <Page
             key={`${i}-${width}`}
             pageNumber={i + 1}
-            width={width}                 // width alone controls size
+            width={width}
+            // iOS = SVG to lower memory footprint, others = canvas
+            renderMode={isIOS ? 'canvas' : 'canvas'}
             renderTextLayer={false}
             renderAnnotationLayer={false}
           />
