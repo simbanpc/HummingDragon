@@ -9,7 +9,7 @@ export const Logo = () => {
       className="font-normal items-center text-sm text-black py-1 shrink-0 relative z-20"
     >
       <Image
-        src={`/HD_True_Logo.svg`}
+        src={`/HD_True_Logo_Alt.svg`}
         alt="hero"
         height={400}
         width={400}

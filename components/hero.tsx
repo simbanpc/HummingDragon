@@ -32,30 +32,33 @@ export function Hero() {
 
   const opacity = useTransform(scrollY, [0, 150], [1, 0]);
 
+  const isMobile = () =>
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
   return (
     <div
       ref={parentRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-20 md:px-8 md:pt-40 bg-[#378981]"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-20 md:px-8 md:pt-40 bg-[#378981]"
     >
       <div
-                className="fixed z-0 p-2 md:p-3"
-                style={{
-                  top: "max(env(safe-area-inset-top), 0px)",
-                  left: "max(env(safe-area-inset-left), 0px)",
-                }}
-              >
-                <Link href="/" aria-label="home">
-                  <Image
-                    src="/HD_True_Logo.png"
-                    alt="hero"
-                    height={300}
-                    width={300}
-                    className="select-none md:h-64 md:w-64 h-40 w-40"
-                    priority
-                    draggable={false}
-                  />
-                </Link>
-              </div>
+        className="fixed z-0 p-2 md:p-3"
+        style={{
+          top: "max(env(safe-area-inset-top), 0px)",
+          left: "max(env(safe-area-inset-left), 0px)",
+        }}
+      >
+        <Link href="/" aria-label="home">
+          <Image
+            src="/HD_True_Logo.png"
+            alt="hero"
+            height={300}
+            width={300}
+            className="select-none md:h-64 md:w-64 h-40 w-40"
+            priority
+            draggable={false}
+          />
+        </Link>
+      </div>
       <div className="text-balance relative z-20 mx-auto mb-4 mt-4 max-w-4xl text-center text-4xl font-semibold tracking-tight text-neutral-300 md:text-7xl">
         <Balancer>
           <motion.h2
@@ -77,15 +80,35 @@ export function Hero() {
           </motion.h2>
         </Balancer>
       </div>
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2, delay: 0.5 }}
-        className="relative z-20 mx-auto mt-4 max-w-xl px-4 text-center text-base/6 text-[#31312B]  sm:text-base"
-      >
-        Clarity that captivates. 
-        Strategy that endures.
-      </motion.p>
+      {isMobile() ?
+        <>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.5 }}
+          className="relative z-20 mx-auto mt-4 max-w-xl text-center text-base/6 text-[#31312B] sm:text-base"
+        >
+          Brand clarity that captivates. 
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.5 }}
+          className="relative z-20 mx-auto mt-4 max-w-xl text-center text-base/6 text-[#31312B] sm:text-base"
+        >
+          Strategy that endures.
+        </motion.p>
+        </>
+      : <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.5 }}
+          className="relative z-20 mx-auto mt-4 max-w-xl text-center text-base/6 text-[#31312B] sm:text-base"
+        >
+          Brand clarity that captivates. 
+          Strategy that endures.
+        </motion.p>
+      }
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

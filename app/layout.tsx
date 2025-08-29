@@ -9,7 +9,19 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Humming Dragon",
   description:
-    "Hum in Market. Clarity that captivates. Strategy that endures.",
+    "Hum in Market. Brand clarity that captivates. Strategy that endures.",
+  openGraph: {
+    title: "Humming Dragon",
+    description: "Hum in Market. Brand clarity that captivates. Strategy that endures.",
+    siteName: "Humming Dragon",
+    url: "https://hummingdragon.com"
+  },
+  twitter:{
+    title: "Humming Dragon",
+    description: "Hum in Market. Brand clarity that captivates. Strategy that endures.",
+    site: "https://hummingdragon.com",
+    card: "summary"
+  }
 };
 
 export default function RootLayout({

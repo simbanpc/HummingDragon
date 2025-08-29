@@ -6,10 +6,19 @@ import { redirect } from 'next/navigation';
 export const metadata: Metadata = {
   title: "Humming Dragon - Brochure",
   description:
-  "The Social App Store. Where Apps live and people connect.",
+    "Hum in Market. Brand clarity that captivates. Strategy that endures.",
   openGraph: {
+    title: "Humming Dragon",
+    description: "Hum in Market. Brand clarity that captivates. Strategy that endures.",
+    siteName: "Humming Dragon",
     url: "https://hummingdragon.com"
   },
+  twitter:{
+    title: "Humming Dragon",
+    description: "Hum in Market. Brand clarity that captivates. Strategy that endures.",
+    site: "https://hummingdragon.com",
+    card: "summary"
+  }
 };
 
 export default async function ContactPage() {
