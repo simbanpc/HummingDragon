@@ -13,7 +13,9 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="relative overflow-hidden bg-[#378981]">
-      <BrochurePage/>
+      <div className="w-full max-w-[900px] mx-auto">
+        <BrochurePage/>
+      </div>
     </div>
   );
 }
