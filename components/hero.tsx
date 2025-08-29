@@ -46,7 +46,7 @@ export function Hero() {
               >
                 <Link href="/" aria-label="home">
                   <Image
-                    src="/HD_True_Logo.png"
+                    src="/HD_True_Logo.svg"
                     alt="hero"
                     height={300}
                     width={300}

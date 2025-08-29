@@ -6,7 +6,7 @@ export const Logo = () => {
   return (
     <Link
       href="/"
-      className="font-normal  items-center text-sm text-black py-1 shrink-0 relative z-20"
+      className="font-normal items-center text-sm text-black py-1 shrink-0 relative z-20"
     >
       <Image
         src={`/HD_True_Logo.svg`}

@@ -44,7 +44,7 @@ export function Footer() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-10 md:ml-10">
             <div className="flex flex-col space-y-4">
-              <p className="text-white font-semibold">Office Phone</p>
+              <p className="text-white font-semibold">Phone</p>
               <ul className="space-y-3">
                 {documentation.map((item, idx) => (
                   <li key={`doc-${idx}`}>
