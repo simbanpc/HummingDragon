@@ -1,4 +1,4 @@
-import PdfViewer from "@/components/pdfViewer";
+import BrochurePage from "@/components/brochurePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="relative overflow-hidden bg-[#378981]">
-      <PdfViewer fileUrl="/Humming_Dragon_Brochure_Website.pdf" />
+      <BrochurePage/>
     </div>
   );
 }

@@ -1,12 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { Logo } from "./logo";
-import {
-  IconBrandDiscord,
-  IconBrandLinkedin,
-  IconBrandMastodon,
-  IconBrandTwitter,
-} from "@tabler/icons-react";
 
 export function Footer() {
   const documentation = [
@@ -24,18 +18,6 @@ export function Footer() {
     //{ title: "Brand", href: "#" },
   ];
 
-  const legal = [
-    { title: "Acceptable Use", href: "#" },
-    { title: "Privacy Policy", href: "#" },
-    { title: "Terms of Service", href: "#" },
-  ];
-
-  const socials = [
-    { title: "Twitter", href: "#", icon: IconBrandTwitter },
-    { title: "Discord", href: "#", icon: IconBrandDiscord },
-    { title: "LinkedIn", href: "#", icon: IconBrandLinkedin },
-    { title: "Mastodon", href: "#", icon: IconBrandMastodon },
-  ];
 
   return (
     <div className="relative border-t border-white/[0.1] px-8 bg-[#31312B] w-full overflow-hidden mx-auto max-w-7xl">

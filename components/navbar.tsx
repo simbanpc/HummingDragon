@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { Button } from "./button";
 import { Logo } from "./logo";
-import Image from "next/image";
+
 
 interface NavbarProps {
   navItems: {
@@ -60,8 +60,8 @@ export const Navbar = () => {
   );
 };
 
-const DesktopNav = ({ navItems, visible }: NavbarProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+const DesktopNav = ({ visible }: NavbarProps) => {
+  const [, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <motion.div
