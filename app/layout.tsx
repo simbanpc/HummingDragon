@@ -19,9 +19,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preload" as="document" href="/Humming_Dragon_Brochure_Website.pdf" />
-      </head>
       <body className={cn("antialiased bg-[#31312B]", inter.className)}>
         {/*<Navbar />*/}
         {children}
